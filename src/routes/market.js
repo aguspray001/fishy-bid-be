@@ -3,6 +3,7 @@ const router = express.Router();
 const { body } = require("express-validator");
 
 const marketController = require('../controllers/market');
+const { jwtAuth } = require("../helpers/jwtAuth");
 
 //[POST] : /v1/blog/post <-- ini adalah endpoint
 router.post(
@@ -14,6 +15,6 @@ router.post(
   marketController.addMarket
 );
 
-router.get("/:marketId", marketController.getMarketById);
+router.get("/:marketId", jwtAuth ,marketController.getMarketById);
 
 module.exports = router;
