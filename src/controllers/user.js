@@ -1,8 +1,9 @@
 const { sign } = require("../helpers/jwtHandler");
 const { validationResult } = require("express-validator");
+const bcrypt = require("bcrypt")
 const userSchema = require("../models/user");
 
-exports.userLogin = (req, res, next) => {
+exports.userLogin = async (req, res, next) => {
   const error = validationResult(req);
 
   if (!error.isEmpty()) {
@@ -11,28 +12,27 @@ exports.userLogin = (req, res, next) => {
     err.data = error.array(); //from validationResult
     throw err;
   }
-  userSchema.findOne({
-      email: req.body.email
-  }).exec((err, user)=>{
-      if(!user){
-        return res.status(401).json({
-            message: "your email is not registered"
-        })
-      };
-      if(user){
-          const email = req.body.email;
-          const password = req.body.password;
-          const token = sign({
-            email: email,
-            password: password,
-          });
+  let user = await userSchema.findOne({email: req.body.email})
+  if(user){
+    let checkPassword = bcrypt.compareSync(req.body.password, user.password)
+        if (checkPassword) {
+          const token = sign({user});
           res.status(200).json({
-            message: "login sukses",
+            message: "Login Sucess!",
             token: token,
+            verified_user: user.image?1:0
           });
-      }
-      next()
-  })
+        }
+        else{
+          res.status(401).json({
+            message: "Wrong password!",
+          });
+        }
+        next();
+  }else{
+    res.status(404).json({message:"user not found!"})
+    next();
+  }
 };
 
 exports.userRegister = (req, res, next) => {
@@ -43,9 +43,6 @@ exports.userRegister = (req, res, next) => {
     err.data = error.array(); //from validationResult
     throw err;
   }
-
-  //mengecek request file
-  console.log(req.file);
   if (!req.file) {
     const err = new Error("Image is required!");
     err.errorStatus = 422; //error status

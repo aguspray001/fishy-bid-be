@@ -53,8 +53,8 @@ app.use(
 app.use(cors())
 
 // calling routes
-app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/market", marketRoutes);
+app.use("/api/v1/user", userRoutes);
 
 
 // handling global error

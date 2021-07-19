@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const MarketPost = new Schema(
+const MarketSchema = new Schema(
   {
     name: {
       type: String,
@@ -23,4 +23,4 @@ const MarketPost = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("MarketPost", MarketPost); //('nama model', format model)
+module.exports = mongoose.model("MarketSchema", MarketSchema); //('nama model', format model)
