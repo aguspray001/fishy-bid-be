@@ -21,4 +21,4 @@ userSchema.pre('save', function(next){
   next();
   });
 
-module.exports = mongoose.model("userSchema", userSchema); //('nama model', format model)
+module.exports = mongoose.model("user", userSchema); //('nama model', format model)

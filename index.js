@@ -10,12 +10,13 @@ const { errorHandler } = require("./src/helpers/errorHandler");
 // routes
 const marketRoutes = require('./src/routes/market');
 const userRoutes = require('./src/routes/user');
+const itemRoutes = require('./src/routes/item');
 
 // init
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3001;
-const connectionOptions = {useCreateIndex:true, useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:true}
+const connectionOptions = {useCreateIndex:true, useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false}
 
 
 const fileStrorage = multer.diskStorage({
@@ -53,8 +54,10 @@ app.use(
 app.use(cors())
 
 // calling routes
-app.use("/api/v1/market", marketRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/market", marketRoutes);
+app.use("/api/v1/item", itemRoutes);
+
 
 
 // handling global error

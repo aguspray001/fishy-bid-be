@@ -14,13 +14,18 @@ exports.userLogin = async (req, res, next) => {
   }
   let user = await userSchema.findOne({email: req.body.email})
   if(user){
+    console.log(user._doc)
     let checkPassword = bcrypt.compareSync(req.body.password, user.password)
         if (checkPassword) {
-          const token = sign({user});
+          // copy and add verified status if image is exist
+          const data = {
+            ...user._doc, verified_user: user.image?1:0
+          }
+          const token = sign(data);
           res.status(200).json({
             message: "Login Sucess!",
-            token: token,
-            verified_user: user.image?1:0
+            data: token,
+            error:0
           });
         }
         else{

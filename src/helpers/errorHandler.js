@@ -2,10 +2,19 @@ const express = require('express');
 const app = express();
 
 exports.errorHandler = async (error, req, res, next) =>{
-        const status = error.errorStatus || 500;
-        const message = error.message;
-        const data = error.data;
+        let jres = {
+                error : 0,
+                data : [],
+                message : '',
+                stack : {},
+                erorrName: ''
+        }
+        jres.error = error.errorStatus || 500;
+        jres.message = error.message;
+        jres.data = [];
+        jres.stack = error.stack;
+        jres.erorrName = error.name;
 
-        res.status(status).json({ message: message, data: data });
+        res.json(jres);
         next();
 }

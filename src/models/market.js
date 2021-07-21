@@ -5,22 +5,17 @@ const MarketSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required : true
     },
     location: {
       type: String,
-      required: false,
+      required : true
     },
     image: {
-      type: String,
-      required: true,
-    },
-    items: {
-      type: Object,
-      default:null
+      type: String
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("MarketSchema", MarketSchema); //('nama model', format model)
+module.exports = mongoose.model("market", MarketSchema); //('nama model', format model)
