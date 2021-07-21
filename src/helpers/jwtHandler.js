@@ -13,7 +13,7 @@ exports.verify = (token) => {
         return jwt.verify(token, process.env.TOKEN_SECRET);
     }
     catch(err){
-        console.log("JWT VERIFY", err)
+        // console.log("JWT VERIFY", err)
         return false
     }
 };

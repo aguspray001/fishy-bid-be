@@ -1,82 +1,19 @@
-const { sign } = require("../helpers/jwtHandler");
-const { validationResult } = require("express-validator");
-const bcrypt = require("bcrypt")
-const userSchema = require("../models/user");
+const { requestHandler } = require("../helpers/requestHandler");
+
+const userProcess = require("../process/user");
+let process = new userProcess();
 
 exports.userLogin = async (req, res, next) => {
-  const error = validationResult(req);
-
-  if (!error.isEmpty()) {
-    const err = new Error("Invalid Value");
-    err.errorStatus = 400;
-    err.data = error.array(); //from validationResult
-    throw err;
-  }
-  let user = await userSchema.findOne({email: req.body.email})
-  if(user){
-    console.log(user._doc)
-    let checkPassword = bcrypt.compareSync(req.body.password, user.password)
-        if (checkPassword) {
-          // copy and add verified status if image is exist
-          const data = {
-            ...user._doc, verified_user: user.image?1:0
-          }
-          const token = sign(data);
-          res.status(200).json({
-            message: "Login Sucess!",
-            data: token,
-            error:0
-          });
-        }
-        else{
-          res.status(401).json({
-            message: "Wrong password!",
-          });
-        }
-        next();
-  }else{
-    res.status(404).json({message:"user not found!"})
-    next();
-  }
+  requestHandler(req, res, next, async () => {
+    return await process.login(req);
+  });
 };
 
 exports.userRegister = (req, res, next) => {
-  const error = validationResult(req);
-  if (!error.isEmpty()) {
-    const err = new Error("Invalid Value");
-    err.errorStatus = 400;
-    err.data = error.array(); //from validationResult
-    throw err;
-  }
-  if (!req.file) {
-    const err = new Error("Image is required!");
-    err.errorStatus = 422; //error status
-    throw err;
-  }
-  //   menerima request
-  const name = req.body.name;
-  const image = req.file.path;
-  const email = req.body.email;
-  const password = req.body.password;
-
-  //membuat variable posting yang memanggil model untuk diberi nilai request (title, body, dan author yg dummy)
-  const data = new userSchema({
-    name: name,
-    image: image,
-    email: email,
-    password: password,
+  requestHandler(req, res, next, async () => {
+    const { name, email, password } = await req.body;
+    const image = await req.file.path;
+    // console.log(req)
+    return await process.register({ name, email, password, image });
   });
-
-  //untuk menyimpan data ke database mongodb
-  data
-    .save()
-    .then((result) => {
-      res.status(201).json({
-        message: "Register Success",
-        data: result,
-      });
-    })
-    .catch((err) => {
-      console.log("err: ", err);
-    });
 };

@@ -3,14 +3,13 @@ const Schema = mongoose.Schema;
 
 const ItemSchema = new Schema(
   {
-    _id: mongoose.Schema.Types.ObjectId,
     name: {
       type: String,
       required: true,
     },
     jenis: {
       type: String,
-      required: false,
+      required: true,
     },
     harga: {
       type: Number,

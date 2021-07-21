@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-exports.requestHandler = async (req, res, next, isFile, callback) => {
+exports.requestHandler = async (req, res, next, callback) => {
   let jres = {
     error: 0,
     data: [],
@@ -9,25 +9,9 @@ exports.requestHandler = async (req, res, next, isFile, callback) => {
     stack: "",
     erorrName: "",
   };
-  if(isFile === true){
-      //mengecek request file
-      if (!req.file) {
-      const err = new Error("File harus diupload");
-      err.errorStatus = 422; //error status
-      next(err)
-      }
-  }
-  try {
-    jres.data = await callback(req.body);
+//cb will get value from methods return, then fill into jres.data
+  callback().then(async r=>{
+    jres.data = await r;
     res.json(jres);
-  } catch (error) {
-    //   console.log(error)
-    jres.error = error.errorStatus || 500;
-    jres.message = error.message;
-    jres.data = [];
-    jres.stack = error.stack;
-    jres.erorrName = error.name;
-    res.json(jres);
-  }
-
+  }).catch(e=>next(e)); 
 };
