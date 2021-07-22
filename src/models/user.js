@@ -8,10 +8,12 @@ const userSchema = new Schema(
   {
     createdAt:{type:Date, default:Date.now},
     name:{type:String, required:false},
-    image:{type:String, required:true},
+    image:{type:String},
     email:{type:String, required:false},
     password:{type:String, required:false},
-    deletedAt:{type:Date, default:null}
+    verifyCode : {type:Number, default:0},
+    verifyReason : {type:String},
+    deletedAt:{type:Date, default:0}
   },
 );
 

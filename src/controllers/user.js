@@ -17,3 +17,19 @@ exports.userRegister = (req, res, next) => {
     return await process.register({ name, email, password, image });
   });
 };
+
+exports.userVerify = async (req, res, next) => {
+  const { userId } = req.params;
+
+  requestHandler(req, res, next, async () => {
+    return await process.verify(userId);
+  });
+};
+
+exports.userReject = async (req, res, next) => {
+  const { userId } = req.params;
+
+  requestHandler(req, res, next, async (body) => {
+    return await process.reject(body, userId);
+  });
+};

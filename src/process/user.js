@@ -6,9 +6,10 @@ const userSchema = require("../models/user");
 class userProcess {
   async login(req) {
     let user = await userSchema.findOne({ email: req.body.email });
+    // console.log(user)
     let checkPassword = await bcrypt.compareSync(req.body.password, user.password);
     if (checkPassword) {
-      const data = {...user._doc,verified_user: user.image ? 1 : 0,}; // copy and add verified status if image is exist
+      const data = user._doc; // copy and add verified status if image is exist
       const token = sign(data);
       return {data: token}
     }else{
@@ -30,6 +31,41 @@ class userProcess {
         e.name = 'Email is already exist'
         e.errorStatus = 500
         throw e; //throw untuk membuang error, return untuk data
+    }
+  }
+  async verify(userId){
+    const user = await userSchema.findByIdAndUpdate(userId, {verifyCode:1, verifyReason:""});
+    if(user) return true
+    if(!user){
+      const e = new Error()
+      e.message = 'User with params id not found!'
+      e.name = 'User id not found'
+      e.errorStatus = 500
+      throw e; //throw untuk membuang error, return untuk data
+    }
+  }
+  async reject(body, userId){
+    let reason = await this.reasonConvert(parseInt(body.reason_code))
+
+    const user = await userSchema.findByIdAndUpdate(userId, {verifyCode:2, verifyReason:reason})
+    if(user) return user
+    if(!user){
+      const e = new Error()
+      e.message = 'User with params id not found!'
+      e.name = 'User id not found'
+      e.errorStatus = 500
+      throw e; //throw untuk membuang error, return untuk data
+    }
+  }
+
+  reasonConvert(reason){
+    switch (reason) {
+      case 1:
+        return "Foto Buram atau Tidak Jelas"
+      case 2:
+        return "Nama Tidak Sesuai dengan KTP / Kartu Identitas"
+      default:
+        return "";
     }
   }
 }

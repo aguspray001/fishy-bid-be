@@ -12,7 +12,7 @@ exports.addMarket = async (req, res, next) => {
 };
 
 exports.getMarketById = async (req, res, next) => {
-  requestHandler(req, res, async () => {
+  requestHandler(req, res, next, async () => {
     const { marketId } = req.params;
     return await process.getById(marketId);
   });

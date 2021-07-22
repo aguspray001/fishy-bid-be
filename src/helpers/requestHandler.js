@@ -10,7 +10,7 @@ exports.requestHandler = async (req, res, next, callback) => {
     erorrName: "",
   };
 //cb will get value from methods return, then fill into jres.data
-  callback().then(async r=>{
+  callback(req.body).then(async r=>{
     jres.data = await r;
     res.json(jres);
   }).catch(e=>next(e)); 

@@ -11,7 +11,7 @@ exports.addItem = async (req, res, next) => {
 };
 
 exports.getItemById = async (req, res, next) => {
-  requestHandler(req, res, async ()=>{
+  requestHandler(req, res, next, async ()=>{
     const {itemId} = req.params;
     return await process.getById(itemId)
   })
