@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 exports.errorHandler = async (error, req, res, next) => {
+
   let jres = {
     error: 0,
     data: [],

@@ -27,7 +27,7 @@ exports.userVerify = async (req, res, next) => {
 };
 
 exports.userReject = async (req, res, next) => {
-  const { userId } = req.params;
+  const { userId } = await req.params;
 
   requestHandler(req, res, next, async (body) => {
     return await process.reject(body, userId);

@@ -10,11 +10,14 @@ class marketProcess {
   async getById(id) {
     let data = [];
     let item_data = [];
+
     await ItemSchema.find({ market_place: id }).then(async (item) => {
       if (item) {
         data = await MarketSchema.findById(id);
         item_data = item;
-      }if(!item){
+      }
+    }).catch(async (er)=>{
+      if(er){
         const e = new Error()
         e.message = 'Item not Found in this Market!'
         e.name = 'Item not found'

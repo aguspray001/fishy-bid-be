@@ -34,28 +34,38 @@ class userProcess {
     }
   }
   async verify(userId){
-    const user = await userSchema.findByIdAndUpdate(userId, {verifyCode:1, verifyReason:""});
-    if(user) return true
-    if(!user){
-      const e = new Error()
-      e.message = 'User with params id not found!'
-      e.name = 'User id not found'
-      e.errorStatus = 500
-      throw e; //throw untuk membuang error, return untuk data
-    }
+    await userSchema.findByIdAndUpdate(userId, {verifyCode:1, verifyReason:""})
+    .then(r=>{
+      if(r){
+        return r
+      }
+    }).catch(er=>{
+      if(er){
+        const e = new Error()
+        e.message = 'User with params id not found!'
+        e.name = 'User id not found'
+        e.errorStatus = 500
+        throw e; //throw untuk membuang error, return untuk data
+      } 
+    })
   }
   async reject(body, userId){
     let reason = await this.reasonConvert(parseInt(body.reason_code))
 
-    const user = await userSchema.findByIdAndUpdate(userId, {verifyCode:2, verifyReason:reason})
-    if(user) return user
-    if(!user){
-      const e = new Error()
-      e.message = 'User with params id not found!'
-      e.name = 'User id not found'
-      e.errorStatus = 500
-      throw e; //throw untuk membuang error, return untuk data
-    }
+    await userSchema.findByIdAndUpdate(userId, {verifyCode:2, verifyReason:reason})
+    .then(r=>{
+      if(r){
+        return r
+      }
+    }).catch(er=>{
+      if(er){
+        const e = new Error()
+        e.message = 'User with params id not found!'
+        e.name = 'User id not found'
+        e.errorStatus = 500
+        throw e; //throw untuk membuang error, return untuk data
+      } 
+    })
   }
 
   reasonConvert(reason){
