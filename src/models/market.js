@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
 const MarketSchema = new Schema(
   {
@@ -14,6 +15,10 @@ const MarketSchema = new Schema(
     image: {
       type: String
     },
+    itemId : [{
+      type: ObjectId,
+      ref: 'item'
+    }]
   },
   { timestamps: true }
 );

@@ -23,12 +23,13 @@ const ItemSchema = new Schema(
         type: Number,
         required: true,
     },
-    image: {
+    image: [{
         type: String,
         required: true,
-    },
-    market_place:{
-      type: mongoose.Schema.Types.ObjectId, ref: "market", required:true
+    }],
+    marketId:{
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "market"
     },
   },
   { timestamps: true }

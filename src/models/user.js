@@ -13,6 +13,8 @@ const userSchema = new Schema(
     password:{type:String, required:false},
     verifyCode : {type:Number, default:0},
     verifyReason : {type:String},
+    uniqueString : {type:String},
+    isValidEmail : {type: Number, default:0},
     deletedAt:{type:Date, default:0}
   },
 );

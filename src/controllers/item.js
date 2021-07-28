@@ -5,8 +5,14 @@ let process = new itemProcess();
 exports.addItem = async (req, res, next) => {
   requestHandler(req, res, next, async () => {
     const { name, jenis, grade, status, harga, market_place } = await req.body;
-    const image = await req.file.path;
-    return await process.insert({ name, jenis, grade, status, harga, market_place, image });
+    if(req.files.length > 0){
+      const image = await req.files.map((item)=>{
+        return item.filename
+      });
+      return await process.insert({ name, jenis, grade, status, harga, market_place, image });
+    }else{
+      res.status(500).json({message:"image is required"})
+    }
   });
 };
 

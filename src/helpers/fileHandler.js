@@ -20,26 +20,5 @@ const fileFilter = (req, file, cb) => {
     cb(null, false);
   }
 };
-const uploadSingle = multer({ storage: fileStrorage, fileFilter: fileFilter }).single("image")
-const uploadMulti = multer({ storage: fileStrorage, fileFilter: fileFilter }).array("image", 10)
-
-exports.uploadFile = (isMulti) =>{
-    if(isMulti===false){
-        uploadSingle(req, res, function (err){
-            if (err instanceof multer.MulterError) {
-                res.json({message: err})
-              } else if (err) {
-                res.json({message: err})
-              }
-        })
-    }
-    if(isMulti===true){
-        uploadMulti(req, res, function (err){
-            if (err instanceof multer.MulterError) {
-                res.json({message: err})
-              } else if (err) {
-                res.json({message: err})
-              }
-        })
-    }
-}
+exports.uploadSingle = multer({ storage: fileStrorage, fileFilter: fileFilter }).single("image")
+exports.uploadMulti = multer({ storage: fileStrorage, fileFilter: fileFilter }).array("image", 10)

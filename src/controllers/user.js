@@ -11,10 +11,17 @@ exports.userLogin = async (req, res, next) => {
 
 exports.userRegister = (req, res, next) => {
   requestHandler(req, res, next, async () => {
-    const { name, email, password } = await req.body;
-    const image = await req.file.path;
-    // console.log(req)
-    return await process.register({ name, email, password, image });
+    try{
+      const { name, email, password } = await req.body;
+      if(!req.file) res.status(500).json({message:"Image must be uploaded"})
+      else{
+        const image = await req.file.path;
+        const uniqueString = randString();
+        return await process.register({ name, email, password, image, uniqueString });
+      }
+    }catch(error){
+      next(error)
+    }
   });
 };
 
@@ -26,6 +33,14 @@ exports.userVerify = async (req, res, next) => {
   });
 };
 
+exports.emailVerify = async (req, res, next) => {
+  const { uniqueString } = req.params;
+
+  requestHandler(req, res, next, async () => {
+    return await process.emailVerify(uniqueString);
+  });
+};
+
 exports.userReject = async (req, res, next) => {
   const { userId } = await req.params;
 
@@ -33,3 +48,14 @@ exports.userReject = async (req, res, next) => {
     return await process.reject(body, userId);
   });
 };
+
+const randString = () => {
+  const len = 8
+  let randStr = ''
+
+  for(let i = 0; i<len; i++){
+    const ch =Math.floor((Math.random()*10)+1)
+    randStr += ch
+  }
+  return randStr
+}

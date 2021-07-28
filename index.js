@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const multer = require("multer");
+var logger = require('morgan');
 const path = require("path");
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -18,37 +18,13 @@ dotenv.config();
 const PORT = process.env.PORT || 3001;
 const connectionOptions = {useCreateIndex:true, useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false}
 
-
-const fileStrorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images"); //cb(error, nama folder yang diakses)
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().getTime() + "-" + file.originalname); //cb(error, nama file)
-  },
-});
-
-//filter extension file
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    cb(null, true); //cb(error, kondisi)
-  } else {
-    cb(null, false);
-  }
-};
+app.use(logger('dev'));
 
 // handling body parser
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// handling save image
 app.use("/images", express.static(path.join(__dirname, "images"))); //url static dimana images berada
-app.use(
-  multer({ storage: fileStrorage, fileFilter: fileFilter }).single("image")
-);
 
 // handling CORS
 app.use(cors())
@@ -57,8 +33,6 @@ app.use(cors())
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/market", marketRoutes);
 app.use("/api/v1/item", itemRoutes);
-
-
 
 // handling global error
 app.use(errorHandler);

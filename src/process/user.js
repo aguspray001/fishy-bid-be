@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const userSchema = require("../models/user");
 const { errorMessage } = require("../helpers/errorMessage");
+const { sendEmailVerification } = require("../helpers/emailVerification");
 
 class userProcess {
   async login(req) {
@@ -28,14 +29,11 @@ class userProcess {
     const checkUser = await userSchema.findOne({ email: data.email });
     if (!checkUser) {
       const resp = await userSchema.create(data);
+      // sendEmailVerification(data.email, data.uniqueString)
       return { data: resp };
     }
     if (checkUser) {
-      const e = new Error();
-      e.message = "Email has been registered!";
-      e.name = "Email is already exist";
-      e.errorStatus = 500;
-      throw e; //throw untuk membuang error, return untuk data
+      errorMessage("Email has been registered!", 500);
     }
   }
   async verify(userId) {
@@ -51,6 +49,16 @@ class userProcess {
           errorMessage("User with params id not found!", 404);
         }
       });
+  }
+  async emailVerify(uniqueString) {
+    const user = await userSchema.findOne({ uniqueString: uniqueString });
+    if (user) {
+      user.isEmailValid = 1;
+      await user.save();
+      return {data:user}
+    } else {
+      errorMessage("Email with params id not found!", 404);
+    }
   }
   async reject(body, userId) {
     let reason = await this.reasonConvert(parseInt(body.reason_code));
