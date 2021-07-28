@@ -24,7 +24,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("/images", express.static(path.join(__dirname, "images"))); //url static dimana images berada
+// app.use("/images", express.static(path.join(__dirname, "images"))); //url static dimana images berada
+app.use(express.static(path.join(__dirname, 'src')));
+
 
 // handling CORS
 app.use(cors())
