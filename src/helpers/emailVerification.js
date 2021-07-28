@@ -1,4 +1,6 @@
 const nodemailer = require("nodemailer");
+const path = require("path");
+const ejs = require("ejs");
 
 exports.sendEmailVerification = async (email, uniqueString)=>{
     const Transport = nodemailer.createTransport({
@@ -12,25 +14,25 @@ exports.sendEmailVerification = async (email, uniqueString)=>{
         }
     });
 
-    const mailOptions = {
-        from:'aguspray001@gmail.com',
-        to : email,
-        subject : 'Email verification',
-        html : `Press <a href=http://localhost:3333/email-verify/${uniqueString}> here </a> to verify your email. thanks`
-    }
-
-    Transport.sendMail(mailOptions, (err, res)=>{
-        if(err){
-            console.log("error",err)
-            // res.send("Email could not sent due to error: "+err);
-            // const e = new Error()
-            // e.message = "Something error when verif email!";
-            // e.name = "Email verification error!";
-            // e.errorStatus = 500;
-            // throw e; //throw untuk membuang error, return untuk data
-        }else{
-            console.log("sukses",res)
-            // res.send("Email has been sent successfully");
+    await ejs.renderFile(path.join(__dirname, "../views/emailVerif.ejs"), {code : uniqueString, api : `http://localhost:3333/api/v1/user/email-verify/${uniqueString}`}, async (err, data)=>{
+        if(err) console.log(err)
+        else{
+            const mailOptions = {
+                from:'aguspray001@gmail.com',
+                to : email,
+                subject : 'Email verification',
+                html : data,
+                text: data
+            }
+        
+            Transport.sendMail(mailOptions, (err, res)=>{
+                if(err){
+                    console.log("error",err)
+                }else{
+                    console.log("sukses",res)
+                }
+            })
         }
     })
+    
 }

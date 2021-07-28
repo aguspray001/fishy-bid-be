@@ -18,6 +18,11 @@ dotenv.config();
 const PORT = process.env.PORT || 3001;
 const connectionOptions = {useCreateIndex:true, useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false}
 
+// view engine setup
+app.set('views', path.join(__dirname, 'src/views'));
+app.set('view engine', 'ejs');
+
+// morgan
 app.use(logger('dev'));
 
 // handling body parser

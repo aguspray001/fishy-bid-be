@@ -7,7 +7,7 @@ const { uploadSingle } = require("../helpers/fileHandler");
 router.post("/login", userController.userLogin);
 router.post("/register", uploadSingle, userController.userRegister);
 router.post("/verify/:userId", userController.userVerify);
-router.post("/email-verify/:uniqueString", userController.emailVerify);
+router.get("/email-verify/:uniqueString", userController.emailVerify);
 router.post("/reject/:userId", userController.userReject);
 
 module.exports = router;

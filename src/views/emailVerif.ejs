@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <title>Document</title>
+    <style>
+        body{
+            font-family: 'Inter', sans-serif;
+        }
+        .container{
+            padding:10px 20%
+        }
+        .divider{
+            margin: 10px 0px;
+            border-top: 3px solid #b10707;
+        }
+        .hello{
+            font-weight: 600;
+            font-size: 22px;
+            color:rgb(90, 90, 90)
+        }
+        @media only screen and (max-width:600px) {
+            .container{
+                padding:0px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <div style="text-align: center;">
+            <img src="https://noabike.id/main_logo.png" height="50px" />
+        </div> -->
+        <div class="divider"></div>
+        <div style="padding:8px 15px">
+            <div class="hello">Hello Fishy Bidder!</div>
+            <div style="margin-top: 20px;color:rgb(153, 150, 150)">
+                <p>Here is your code verfication :</p>
+                <p><%= code %></p>
+                <a href='<%= api %>'>Click Here to Verify your account</a>
+            </div>
+            <div style="margin:5em 0px; color:rgb(90, 90, 90)">
+                Fishy-Bid Team
+            </div>
+        </div>
+        <div class="divider"></div>
+    </div>
+</body>
+</html>

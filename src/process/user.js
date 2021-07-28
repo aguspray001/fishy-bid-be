@@ -29,7 +29,7 @@ class userProcess {
     const checkUser = await userSchema.findOne({ email: data.email });
     if (!checkUser) {
       const resp = await userSchema.create(data);
-      // sendEmailVerification(data.email, data.uniqueString)
+      sendEmailVerification(data.email, data.uniqueString)
       return { data: resp };
     }
     if (checkUser) {
@@ -53,8 +53,9 @@ class userProcess {
   async emailVerify(uniqueString) {
     const user = await userSchema.findOne({ uniqueString: uniqueString });
     if (user) {
-      user.isEmailValid = 1;
+      user.isValidEmail = 1;
       await user.save();
+      console.log(user)
       return {data:user}
     } else {
       errorMessage("Email with params id not found!", 404);
