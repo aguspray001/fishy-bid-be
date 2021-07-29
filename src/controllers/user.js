@@ -4,6 +4,9 @@ const userProcess = require("../process/user");
 let process = new userProcess();
 
 exports.userLogin = async (req, res, next) => {
+  const { name, email, password } = await req.body;
+
+  console.log("hadnler", email)
   requestHandler(req, res, next, async () => {
     return await process.login(req);
   });

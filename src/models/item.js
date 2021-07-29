@@ -5,27 +5,22 @@ const ItemSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
     },
-    jenis: {
+    type: {
       type: String,
-      required: true,
     },
-    harga: {
+    price: {
       type: Number,
-      required: true,
     },
     grade: {
         type: String,
-        required: true,
     },
     status: {
         type: Number,
-        required: true,
+        default:0
     },
     image: [{
         type: String,
-        required: true,
     }],
     marketId:{
       type: mongoose.Schema.Types.ObjectId, 
